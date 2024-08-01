@@ -1,0 +1,26 @@
+section{
+    margin: 50px;
+}
+table{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 2px double black;
+    border-collapse: collapse;
+  }
+
+table, th, td{
+    border-left: none;
+    border-right: none;
+}
+
+table, th:nth-child(1), td:nth-child(1){
+    border-left: 2px double black;
+}
+
+table, th:nth-last-child(1), td:nth-last-child(1){
+    border-right: 2px double black;
+}
+

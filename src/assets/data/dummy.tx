@@ -1,0 +1,183 @@
+{
+  "promotionTypes": [
+    {
+      "fields": {
+        "name": {
+          "value": "BUY_ONE_GET_ONE_FREE"
+        },
+        "factor": {
+          "hidden": true,
+          "default": 1,
+          "sendNullToApex": false,
+          "value": 1
+        },
+        "amount": {
+          "disabled": true,
+          "default": 0,
+          "sendNullToApex": false,
+          "value": 44
+        },
+        "uom": {
+          "disabled": true,
+          "selectionAccordingToPPG": true,
+          "value": "LA"
+        },
+        "itemLimit": {
+          "default": "",
+          "max": null,
+          "errorMessage": null,
+          "value": 88
+        },
+        "minQuantity": {
+          "min": 2,
+          "hidden": true,
+          "value": 2
+        }
+      },
+      "id": "efd3"
+    },
+    {
+      "fields": {
+        "name": {
+          "value": "BUY_X_GET_ONE_FREE"
+        },
+        "factor": {
+          "hidden": true,
+          "default": 1,
+          "sendNullToApex": false,
+          "value": 1
+        },
+        "amount": {
+          "hidden": true,
+          "default": 0,
+          "sendNullToApex": false,
+          "value": 0
+        },
+        "uom": {
+          "disabled": true,
+          "selectionAccordingToPPG": true,
+          "value": "LA"
+        },
+        "itemLimit": {
+          "default": "",
+          "max": null,
+          "errorMessage": null,
+          "value": 5
+        },
+        "minQuantity": {
+          "min": 2,
+          "hidden": false,
+          "value": 2
+        }
+      },
+      "id": "a908"
+    },
+    {
+      "fields": {
+        "name": {
+          "value": "CENTS_OFF"
+        },
+        "factor": {
+          "hidden": true,
+          "default": 1,
+          "sendNullToApex": false,
+          "value": 1
+        },
+        "amount": {
+          "max": 99.99,
+          "disabled": false,
+          "warningMessage": "Amount cannot be higher than retail price/regular price.",
+          "sendNullToApex": false,
+          "value": 4
+        },
+        "uom": {
+          "disabled": true,
+          "selectionAccordingToPPG": true,
+          "value": "LA"
+        },
+        "itemLimit": {
+          "default": "",
+          "max": 49,
+          "min": 1,
+          "errorMessage": "Max value for limit is 49",
+          "value": 1
+        },
+        "minQuantity": null
+      },
+      "id": "de12"
+    },
+    {
+      "fields": {
+        "name": {
+          "value": "NET_PRICE"
+        },
+        "factor": {
+          "min": 1,
+          "max": 99,
+          "default": 1,
+          "errorMessage": "Please enter a value greater than 0 and less than 100",
+          "sendNullToApex": false,
+          "value": 5
+        },
+        "amount": {
+          "warningMessage": "Promo amount cannot be greater than Regular Price",
+          "errorMessage": "Please enter a non zero amount",
+          "sendNullToApex": false,
+          "value": 0
+        },
+        "uom": {
+          "disabled": true,
+          "hidden": false,
+          "selectionAccordingToPPG": true,
+          "value": "EA"
+        },
+        "itemLimit": {
+          "default": "",
+          "max": 49,
+          "errorMessage": "Max value for item limit is 49",
+          "value": 0
+        },
+        "minQuantity": {
+          "min": 1,
+          "max": 50,
+          "errorMessage": "Min quantity should be between 1 and 50",
+          "value": 10
+        }
+      },
+      "id": "b44a"
+    },
+    {
+      "fields": {
+        "name": {
+          "value": "PERCENT_OFF"
+        },
+        "factor": {
+          "hidden": true,
+          "default": 1,
+          "sendNullToApex": false,
+          "value": 1
+        },
+        "amount": {
+          "max": 99.99,
+          "warningMessage": "Percentage amount should be less than 99.99%",
+          "sendNullToApex": false,
+          "value": 96
+        },
+        "uom": {
+          "disabled": true,
+          "selectionAccordingToPPG": true,
+          "value": "LA"
+        },
+        "itemLimit": {
+          "default": "",
+          "max": 49,
+          "min": 1,
+          "errorMessage": "Max value for limit is 49",
+          "value": 7
+        },
+        "minQuantity": null
+      },
+      "id": "a51d"
+    }
+  ]
+}

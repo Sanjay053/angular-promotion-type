@@ -1,0 +1,34 @@
+{
+  "promotionTypes": [
+    {
+      "name": "Buy X Get One Free",
+      "itemLimit": 45,
+      "id": "efd3",
+      "minQuantity": 10
+    },
+    {
+      "name": "Cents Off",
+      "amount": 7,
+      "itemLimit": 6,
+      "id": "a908"
+    },
+    {
+      "name": "Buy X Get One Free",
+      "itemLimit": 45,
+      "id": "de12",
+      "minQuantity": 10
+    },
+    {
+      "name": "Percent Off",
+      "amount": 45,
+      "itemLimit": 8,
+      "id": "b44a"
+    },
+    {
+      "id": "b45a",
+      "name": "Buy X Get One Free",
+      "itemLimit": 45,
+      "minQuantity": 10
+    }
+  ]
+}

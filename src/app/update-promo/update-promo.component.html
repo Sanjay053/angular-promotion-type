@@ -1,0 +1,91 @@
+<!-- Ensure Bootstrap CSS is included in your project -->
+<form [formGroup]="promotionForm" (ngSubmit)="updataPromo()" class="p-4">
+  <div class="container">
+    <div class="row">
+
+      <!-- Promotion Type -->
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Promotion Type</mat-label>
+          <!-- Dropdown for selecting promotion type -->
+          <mat-select formControlName="name" (selectionChange)="onPromotionTypeChange($event)">
+            <!-- Loop through promoTypes array to display each type as an option -->
+            <mat-option *ngFor="let type of promoTypes" [value]="type.name">{{ type.name }}</mat-option>
+          </mat-select>
+          <!-- Error message if promotion type is not selected -->
+          <mat-error *ngIf="promotionForm.get('name').hasError('required')">Promotion type is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Factor -->
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.factor.hidden">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Factor</mat-label>
+          <!-- Input field for factor with number type -->
+          <input matInput type="number" formControlName="factor" [attr.disabled]="promotionForm.get('factor').disabled ? true : null">
+          <!-- Error messages for factor validation -->
+          <mat-error *ngIf="promotionForm.get('factor').hasError('min')">{{fieldStates.factor.errorMessage}}</mat-error>
+          <mat-error *ngIf="promotionForm.get('factor').hasError('max')">{{fieldStates.factor.errorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Amount -->
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.amount.hidden">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Amount $</mat-label>
+          <!-- Input field for amount with number type -->
+          <input matInput type="number" formControlName="amount" [attr.disabled]="promotionForm.get('amount').disabled ? true : null">
+          <!-- Error messages for amount validation -->
+          <mat-error *ngIf="promotionForm.get('amount').hasError('max')">{{fieldStates.amount.warningMessage}}</mat-error>
+          <mat-error *ngIf="promotionForm.get('amount').hasError('min')">{{fieldStates.amount.errorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- UOM (Unit of Measure) -->
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.uom.hidden">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>UOM</mat-label>
+          <!-- Dropdown for selecting UOM -->
+          <mat-select formControlName="uom" [attr.disabled]="promotionForm.get('uom').disabled ? true : null">
+            <!-- Loop through uomOptions array to display each UOM as an option -->
+            <mat-option *ngFor="let unit of uomOptions" [value]="unit.name">{{ unit.name }}</mat-option>
+          </mat-select>
+          <!-- Error message if UOM is not selected -->
+          <mat-error *ngIf="promotionForm.get('uom').hasError('required')">UOM is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Item Limit -->
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.itemLimit.hidden">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Item Limit</mat-label>
+          <!-- Input field for item limit with number type -->
+          <input matInput type="number" formControlName="itemLimit">
+          <!-- Error messages for item limit validation -->
+          <mat-error *ngIf="promotionForm.get('itemLimit').hasError('max')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
+          <mat-error *ngIf="promotionForm.get('itemLimit').hasError('min')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Min Quantity -->
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.minQuantity.hidden">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Min Quantity</mat-label>
+          <!-- Input field for minimum quantity with number type -->
+          <input matInput type="number" formControlName="minQuantity">
+          <!-- Error messages for minimum quantity validation -->
+          <mat-error *ngIf="promotionForm.get('minQuantity').hasError('min')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
+          <mat-error *ngIf="promotionForm.get('minQuantity').hasError('max')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Buttons -->
+      <div class="col-12 text-center">
+        <!-- Button to close the popup dialog -->
+        <button mat-flat-button (click)="closepopup()" class="mx-2">Close</button>
+        <!-- Button to submit the form and save all data -->
+        <button mat-raised-button color="accent" type="submit" [disabled]="!promotionForm.valid" class="mx-2">Save</button>
+      </div>
+    </div>
+  </div>
+</form>

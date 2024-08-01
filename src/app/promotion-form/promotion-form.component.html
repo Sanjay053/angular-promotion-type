@@ -1,0 +1,76 @@
+<!-- Make sure you have included Bootstrap CSS in your project -->
+
+<section class="p-5">
+  <form [formGroup]="promotionForm" (ngSubmit)="saveToAll()">
+    <div class="container">
+      <div class="row">
+        <!-- Promotion Type -->
+        <div class="col-md-4 mb-3">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Promotion Type</mat-label>
+            <mat-select formControlName="name" (selectionChange)="onPromotionTypeChange($event)">
+              <mat-option *ngFor="let type of promoTypes" [value]="type.name">{{ type.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="promotionForm.get('name').hasError('required')">Promotion type is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Factor -->
+        <div class="col-md-4 mb-3" *ngIf="!fieldStates.factor.hidden">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Factor</mat-label>
+            <input matInput type="number" formControlName="factor" [attr.disabled]="promotionForm.get('factor').disabled ? true : null">
+            <mat-error *ngIf="promotionForm.get('factor').hasError('min')">{{fieldStates.factor.errorMessage}}</mat-error>
+            <mat-error *ngIf="promotionForm.get('factor').hasError('max')">{{fieldStates.factor.errorMessage}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Amount -->
+        <div class="col-md-4 mb-3" *ngIf="!fieldStates.amount.hidden">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Amount $</mat-label>
+            <input matInput type="number" formControlName="amount" [attr.disabled]="promotionForm.get('amount').disabled ? true : null">
+            <mat-error *ngIf="promotionForm.get('amount').hasError('max')">{{fieldStates.amount.warningMessage}}</mat-error>
+            <mat-error *ngIf="promotionForm.get('amount').hasError('min')">{{fieldStates.amount.errorMessage}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- UOM -->
+        <div class="col-md-4 mb-3" *ngIf="!fieldStates.uom.hidden">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>UOM</mat-label>
+            <mat-select formControlName="uom" [attr.disabled]="promotionForm.get('uom').disabled ? true : null">
+              <mat-option *ngFor="let unit of uomOptions" [value]="unit.name">{{ unit.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="promotionForm.get('uom').hasError('required')">UOM is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Item Limit -->
+        <div class="col-md-4 mb-3" *ngIf="!fieldStates.itemLimit.hidden">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Item Limit</mat-label>
+            <input matInput type="number" formControlName="itemLimit">
+            <mat-error *ngIf="promotionForm.get('itemLimit').hasError('max')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
+            <mat-error *ngIf="promotionForm.get('itemLimit').hasError('min')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Min Quantity -->
+        <div class="col-md-4 mb-3" *ngIf="!fieldStates.minQuantity.hidden">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Min Quantity</mat-label>
+            <input matInput type="number" formControlName="minQuantity">
+            <mat-error *ngIf="promotionForm.get('minQuantity').hasError('min')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
+            <mat-error *ngIf="promotionForm.get('minQuantity').hasError('max')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-12">
+          <button mat-raised-button color="accent" type="submit" [disabled]="!promotionForm.valid">Save to All</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
