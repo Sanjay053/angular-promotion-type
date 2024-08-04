@@ -17,6 +17,10 @@ export class MasterService {
     return this.http.get<PromoStateM[]>(this.baseUrl);
   }
 
+  // getById(id: string): Observable<PromoStateM[]>{
+  //   return this.http.get<PromoStateM>(`${this.baseUrl}?id=${id}`);
+  // }
+
   // Fetch a single promotion type by ID
   GetPromotionById(id: string): Observable<PromoStateM> {
     return this.http.get<PromoStateM>(`${this.baseUrl}?id=${id}`);

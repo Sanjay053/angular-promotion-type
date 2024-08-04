@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,8 @@ export class UpdatePromoComponent implements OnInit {
   promotionForm!: FormGroup;
   // ID of the promotion to be updated
   promotionId!: string;
+  isDropdownOpen = false;
+  isDropdownUomOpen = false;
 
   // List of promotion types for the dropdown
   promoTypes: { name: string }[] = [
@@ -28,7 +30,7 @@ export class UpdatePromoComponent implements OnInit {
     { name: 'Net Price' },
     { name: 'Percent Off' }
   ];
-  
+
   // List of unit of measure options for the dropdown
   uomOptions: { name: string }[] = [
     { name: 'EA' },
@@ -49,7 +51,7 @@ export class UpdatePromoComponent implements OnInit {
     private ref: MatDialogRef<UpdatePromoComponent>,
     private fb: FormBuilder,
     private store: Store,
-    private masterService: MasterService 
+    private masterService: MasterService
   ) { }
 
   ngOnInit(): void {
@@ -59,16 +61,45 @@ export class UpdatePromoComponent implements OnInit {
     // Initialize the promotion form with default values and validators
     this.promotionForm = this.fb.group({
       name: ['', Validators.required],
-      factor: [{ value: '', disabled: false }, [Validators.min(1), Validators.max(100), Validators.required]],
-      amount: [{ value: '', disabled: false }, [Validators.min(0), Validators.max(100), Validators.required]],
-      uom: [{ value: 'EA', disabled: false }, Validators.required],
-      itemLimit: ['', [Validators.min(1), Validators.max(49), Validators.required]],
-      minQuantity: ['', [Validators.min(1), Validators.max(50), Validators.required]]
+      factor: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(100), Validators.required]],
+      amount: [{ value: '', disabled: true }, [Validators.min(0), Validators.max(100), Validators.required]],
+      uom: [{ value: '', disabled: true }, Validators.required],
+      itemLimit: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(49), Validators.required]],
+      minQuantity: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(50), Validators.required]]
     });
   }
 
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  toggleDropDownUom(): void {
+    this.isDropdownUomOpen = !this.isDropdownUomOpen;
+  }
+
+  selectUom(uom: string): void {
+    this.promotionForm.get('uom')!.setValue(uom);
+  }
+
+
+  selectPromotionType(type: string): void {
+    this.promotionForm.get('name')!.setValue(type);
+    this.onPromotionTypeChange({ option: { value: type } });
+    this.isDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isDropdownOpen = false;
+      this.isDropdownUomOpen = false;
+
+    }
+  }
+
   onPromotionTypeChange(event: any): void {
-    const selectedType = event.value;
+    const selectedType = event.option.value;
 
     // Update form fields based on the selected promotion type
     switch (selectedType) {
@@ -155,7 +186,7 @@ export class UpdatePromoComponent implements OnInit {
         });
         this.setFieldStates({
           factor: { hidden: true },
-          amount: { hidden: false, min:1, max: 99.99, warningMessage: 'Amount limit greater than 1 and less than 99.99%' },
+          amount: { hidden: false, min: 1, max: 99.99, warningMessage: 'Amount limit greater than 1 and less than 99.99%' },
           uom: { hidden: false },
           itemLimit: { hidden: false, max: 49, min: 1, errorMessage: 'Max value for limit is 49' },
           minQuantity: { hidden: true }
@@ -172,6 +203,8 @@ export class UpdatePromoComponent implements OnInit {
           minQuantity: { hidden: false }
         });
     }
+    this.isDropdownOpen = false;
+
   }
 
   // Method to update the states of form fields based on the selected promotion type
@@ -181,7 +214,6 @@ export class UpdatePromoComponent implements OnInit {
     Object.keys(states).forEach(field => {
       const state = states[field];
       const control = this.promotionForm.get(field);
-
       if (control) {
         if (state.hidden) {
           control.setValue('');
@@ -210,22 +242,22 @@ export class UpdatePromoComponent implements OnInit {
   }
 
   // Method to handle the form submission
-updataPromo(): void {
-  if (!this.promotionForm.valid) {
-    console.error('Form is not valid');
-    return;
-  }
+  updataPromo(): void {
+    if (!this.promotionForm.valid) {
+      console.error('Form is not valid');
+      return;
+    }
 
-  const formData = this.promotionForm.value;
-  this.masterService.updatePromotion(this.promotionId, formData).subscribe(
-    response => {
-      this.store.dispatch(loadPromotionTypes());
-      console.log('Update successful:', response);
-      this.ref.close(response);
-    },
-    error => console.error('Update failed:', error)
-  );
-}
+    const formData = this.promotionForm.value;
+    this.masterService.updatePromotion(this.promotionId, formData).subscribe(
+      response => {
+        this.store.dispatch(loadPromotionTypes());
+        console.log('Update successful:', response);
+        this.ref.close(response);
+      },
+      error => console.error('Update failed:', error)
+    );
+  }
 
   // Method to close the dialog
   closepopup(): void {

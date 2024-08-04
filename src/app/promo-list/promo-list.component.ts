@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { Store } from '@ngrx/store';
 import { PromoStateM } from '../States/Model/promo.model';
 import { getpromotionlist } from '../States/State/promo.selector';
@@ -23,7 +21,7 @@ export class PromoListComponent implements OnInit {
   // Array to hold the list of promotion types
   promotionTypes!: PromoStateM[];
   // Title for the component
-  title: string = 'Promotion Type';
+  title: string = 'Promotion List';
   // Data source for the Material table
   dataSource: any;
   // Columns to be displayed in the table
@@ -32,9 +30,7 @@ export class PromoListComponent implements OnInit {
   PromotionList!: PromoStateM[];
   // Array to store promotion names extracted from promotion types
   promotionNames: string[] = [];
-  // ViewChild references for pagination and sorting
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  
 
   constructor(private dialog: MatDialog, private store: Store) {}
 
@@ -48,8 +44,6 @@ export class PromoListComponent implements OnInit {
     this.store.select(getpromotionlist).subscribe(item => {
       this.promotionTypes = item; // Update the promotionTypes with data from the store
       this.dataSource = new MatTableDataSource(this.promotionTypes); // Initialize data source for the table
-      this.dataSource.paginator = this.paginator; // Set paginator for the table
-      this.dataSource.sort = this.sort; // Set sorting for the table
       this.extractPromotionNames(item); // Extract names of promotion types
     });
   }

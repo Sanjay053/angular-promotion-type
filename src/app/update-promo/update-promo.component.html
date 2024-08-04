@@ -1,91 +1,197 @@
 <!-- Ensure Bootstrap CSS is included in your project -->
+ <div>
+  
 <form [formGroup]="promotionForm" (ngSubmit)="updataPromo()" class="p-4">
   <div class="container">
     <div class="row">
 
       <!-- Promotion Type -->
       <div class="col-md-6 mb-3">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Promotion Type</mat-label>
-          <!-- Dropdown for selecting promotion type -->
-          <mat-select formControlName="name" (selectionChange)="onPromotionTypeChange($event)">
-            <!-- Loop through promoTypes array to display each type as an option -->
-            <mat-option *ngFor="let type of promoTypes" [value]="type.name">{{ type.name }}</mat-option>
-          </mat-select>
-          <!-- Error message if promotion type is not selected -->
-          <mat-error *ngIf="promotionForm.get('name').hasError('required')">Promotion type is required.</mat-error>
-        </mat-form-field>
+        <div class="relative">
+          <div class="pt-4 ml-5 absolute w-[300px]">
+            <button (click)="toggleDropdown()"
+              class="relative flex items-center justify-between bg-white border focus:outline-none shadow-sm text-gray-600 rounded focus:ring ring-gray-200 group py-2  -top-5 w-full">
+              <p class="px-4 mt-2 text-md" *ngIf="promotionForm.get('name')!.value">
+                {{ promotionForm.get('name')!.value }}
+              </p>
+              <p class="px-4 mt-2 text-md" *ngIf="!promotionForm.get('name')!.value">Select Promotion Type</p>
+              <span class="border-l p-2 hover:bg-gray-100">
+                <img src="../../assets/image/down-arrow-svgrepo-com.svg" alt="down arrow" class="w-5 h-5">
+              </span>
+              <div *ngIf="isDropdownOpen"
+                class="absolute z-50 bg-opacity-15 top-full min-w-full w-max bg-white shadow-lg mt-1 rounded">
+                <ul class="text-left border rounded bg-transparent">
+                  <li *ngFor="let type of promoTypes"
+                    class="px-4 py-2 m-1 text-lg hover:bg-gray-100 border-b cursor-pointer shadow-sm"
+                    (click)="selectPromotionType(type.name)">
+                    {{ type.name }}
+                  </li>
+                </ul>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Factor -->
       <div class="col-md-6 mb-3" *ngIf="!fieldStates.factor.hidden">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Factor</mat-label>
-          <!-- Input field for factor with number type -->
-          <input matInput type="number" formControlName="factor" [attr.disabled]="promotionForm.get('factor').disabled ? true : null">
-          <!-- Error messages for factor validation -->
-          <mat-error *ngIf="promotionForm.get('factor').hasError('min')">{{fieldStates.factor.errorMessage}}</mat-error>
-          <mat-error *ngIf="promotionForm.get('factor').hasError('max')">{{fieldStates.factor.errorMessage}}</mat-error>
-        </mat-form-field>
+        <div class="relative">
+          <div class="px-2 border-b-2">
+            <input id="factor" class="mx-3 py-3 text-lg focus:outline-none w-80 peer placeholder-transparent"
+              type="number" formControlName="factor"
+              [attr.disabled]="promotionForm.get('factor')!.disabled ? true : null" placeholder=" " />
+            <label for="factor"
+              class="absolute left-1 top-1 text-gray-500 transition-all duration-300 transform origin-top-left peer-focus:-top-1 peer-focus:-left-1  peer-placeholder-shown:text-sm  peer-focus:text-xs peer-focus:text-gray-700">
+              Factor
+            </label>
+          </div>
+          <!-- Error message display -->
+          <div
+            *ngIf="promotionForm.get('factor')!.invalid && (promotionForm.get('factor')!.dirty || promotionForm.get('factor')!.touched)"
+            class="text-red-500 text-sm mt-1">
+            <div *ngIf="promotionForm.get('factor')!.errors?.['required']">Factor is required</div>
+            <div *ngIf="promotionForm.get('factor')!.errors?.['min']">
+              Factor must be at least {{ promotionForm.get('factor')!.errors?.['min']?.['min'] }}
+            </div>
+            <div *ngIf="promotionForm.get('factor')!.errors?.['max']">
+              Factor cannot be more than {{ promotionForm.get('factor')!.errors?.['max']?.['max'] }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Amount -->
-      <div class="col-md-6 mb-3" *ngIf="!fieldStates.amount.hidden">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Amount $</mat-label>
-          <!-- Input field for amount with number type -->
-          <input matInput type="number" formControlName="amount" [attr.disabled]="promotionForm.get('amount').disabled ? true : null">
-          <!-- Error messages for amount validation -->
-          <mat-error *ngIf="promotionForm.get('amount').hasError('max')">{{fieldStates.amount.warningMessage}}</mat-error>
-          <mat-error *ngIf="promotionForm.get('amount').hasError('min')">{{fieldStates.amount.errorMessage}}</mat-error>
-        </mat-form-field>
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.uom.hidden">
+        <div class="relative">
+          <div class="px-2 border-b-2">
+            <input id="amount" type="number" formControlName="amount"
+              [attr.disabled]="promotionForm.get('amount')!.disabled ? true : null"
+              class="mx-3 py-3 text-lg focus:outline-none w-80 peer placeholder-transparent" placeholder=" " />
+            <label for="amount"
+              class="absolute left-1 top-1 text-gray-500 transition-all duration-300 transform origin-top-left peer-focus:-top-1 peer-focus:-left-1 peer-placeholder-shown:text-sm peer-focus:text-xs peer-focus:text-gray-700">
+              Amount $
+            </label>
+          </div>
+          <!-- Error message display -->
+          <div
+            *ngIf="promotionForm.get('amount')!.invalid && (promotionForm.get('amount')!.dirty || promotionForm.get('amount')!.touched)"
+            class="text-red-500 text-sm mt-1">
+            <div *ngIf="promotionForm.get('amount')!.errors?.['required']">Amount is required</div>
+            <div *ngIf="promotionForm.get('amount')!.errors?.['min']">
+              Amount must be at least {{ promotionForm.get('amount')!.errors?.['min']?.['min'] }}
+            </div>
+            <div *ngIf="promotionForm.get('amount')!.errors?.['max']">
+              Amount cannot be more than {{ promotionForm.get('amount')!.errors?.['max']?.['max'] }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- UOM (Unit of Measure) -->
-      <div class="col-md-6 mb-3" *ngIf="!fieldStates.uom.hidden">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>UOM</mat-label>
-          <!-- Dropdown for selecting UOM -->
-          <mat-select formControlName="uom" [attr.disabled]="promotionForm.get('uom').disabled ? true : null">
-            <!-- Loop through uomOptions array to display each UOM as an option -->
-            <mat-option *ngFor="let unit of uomOptions" [value]="unit.name">{{ unit.name }}</mat-option>
-          </mat-select>
-          <!-- Error message if UOM is not selected -->
-          <mat-error *ngIf="promotionForm.get('uom').hasError('required')">UOM is required.</mat-error>
-        </mat-form-field>
+      <div class="col-md-6 mb-3" *ngIf="!fieldStates.amount.hidden">
+        <div class="relative">
+          <!-- Dropdown Button -->
+          <div class="pt-0 ml-2 absolute w-[300px]">
+            <button (click)="toggleDropDownUom()" [attr.disabled]="promotionForm.get('factor')!.disabled ? true : null"
+              class="relative flex items-center justify-between bg-white border focus:outline-none shadow-sm text-gray-600 rounded focus:ring ring-gray-200 group py-2 w-full">
+              <p class="px-4 mt-2 text-md" *ngIf="promotionForm.get('uom')!.value">
+                {{ promotionForm.get('uom')!.value }}
+              </p>
+              <p class="px-4 mt-2 text-md" *ngIf="!promotionForm.get('uom')!.value">
+                Select UOM
+              </p>
+              <span class="border-l p-2 hover:bg-gray-100">
+                <img src="../../assets/image/down-arrow-svgrepo-com.svg" alt="down arrow" class="w-5 h-5">
+              </span>
+              <div *ngIf="isDropdownUomOpen"
+                class="absolute z-50 bg-opacity-15 top-full min-w-full w-max bg-white shadow-lg mt-1 rounded">
+                <ul class="text-left border rounded bg-transparent">
+                  <li *ngFor="let unit of uomOptions"
+                    class="px-4 py-2 m-1 text-lg hover:bg-gray-100 border-b cursor-pointer shadow-sm"
+                    (click)="selectUom(unit.name)">
+                    {{ unit.name }}
+                  </li>
+                </ul>
+              </div>
+            </button>
+          </div>
+          <!-- Error Message -->
+          <div
+            *ngIf="promotionForm.get('uom')!.invalid && (promotionForm.get('uom')!.dirty || promotionForm.get('uom')!.touched)"
+            class="text-red-500 text-sm mt-1">
+            <div *ngIf="promotionForm.get('uom')!.errors?.['required']">UOM is required.</div>
+            <!-- Add more error messages here if needed -->
+          </div>
+        </div>
       </div>
 
       <!-- Item Limit -->
       <div class="col-md-6 mb-3" *ngIf="!fieldStates.itemLimit.hidden">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Item Limit</mat-label>
-          <!-- Input field for item limit with number type -->
-          <input matInput type="number" formControlName="itemLimit">
-          <!-- Error messages for item limit validation -->
-          <mat-error *ngIf="promotionForm.get('itemLimit').hasError('max')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
-          <mat-error *ngIf="promotionForm.get('itemLimit').hasError('min')">{{fieldStates.itemLimit.errorMessage}}</mat-error>
-        </mat-form-field>
+        <div class="relative">
+          <div class="px-2 border-b-2">
+            <input id="itemLimit" type="number" formControlName="itemLimit"
+              [attr.disabled]="promotionForm.get('itemLimit')!.disabled ? true : null"
+              class="mx-3 py-3 text-lg focus:outline-none w-80 peer placeholder-transparent border-gray-300 rounded-md"
+              placeholder=" " />
+            <label for="itemLimit"
+              class="absolute left-1 top-1 text-gray-500 transition-all duration-300 transform origin-top-left peer-focus:-top-1 peer-focus:-left-1 peer-placeholder-shown:text-sm peer-focus:text-xs peer-focus:text-gray-700">
+              Item Limit
+            </label>
+          </div>
+          <!-- Error message display -->
+          <div
+            *ngIf="promotionForm.get('itemLimit')!.invalid && (promotionForm.get('itemLimit')!.dirty || promotionForm.get('itemLimit')!.touched)"
+            class="text-red-500 text-sm mt-1">
+            <div *ngIf="promotionForm.get('itemLimit')!.errors?.['required']">Item limit is required</div>
+            <div *ngIf="promotionForm.get('itemLimit')!.errors?.['min']">
+              Item limit must be at least {{ promotionForm.get('itemLimit')!.errors?.['min']?.['min'] }}
+            </div>
+            <div *ngIf="promotionForm.get('itemLimit')!.errors?.['max']">
+              Item limit cannot be more than {{ promotionForm.get('itemLimit')!.errors?.['max']?.['max'] }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Min Quantity -->
       <div class="col-md-6 mb-3" *ngIf="!fieldStates.minQuantity.hidden">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Min Quantity</mat-label>
-          <!-- Input field for minimum quantity with number type -->
-          <input matInput type="number" formControlName="minQuantity">
-          <!-- Error messages for minimum quantity validation -->
-          <mat-error *ngIf="promotionForm.get('minQuantity').hasError('min')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
-          <mat-error *ngIf="promotionForm.get('minQuantity').hasError('max')">{{fieldStates.minQuantity.errorMessage}}</mat-error>
-        </mat-form-field>
+        <div class="relative">
+          <div class="px-2 border-b-2">
+            <input id="minQuantity" type="number" formControlName="minQuantity"
+              [attr.disabled]="promotionForm.get('minQuantity')!.disabled ? true : null"
+              class="mx-3 py-3 text-lg focus:outline-none w-80 peer placeholder-transparent border-gray-300 rounded-md"
+              placeholder=" " />
+            <label for="minQuantity"
+              class="absolute left-1 top-1 text-gray-500 transition-all duration-300 transform origin-top-left peer-focus:-top-1 peer-focus:-left-1 peer-placeholder-shown:text-sm peer-focus:text-xs peer-focus:text-gray-700">
+              Min Quantity
+            </label>
+          </div>
+          <!-- Error message display -->
+          <div
+            *ngIf="promotionForm.get('minQuantity')!.invalid && (promotionForm.get('minQuantity')!.dirty || promotionForm.get('minQuantity')!.touched)"
+            class="text-red-500 text-sm mt-1">
+            <div *ngIf="promotionForm.get('minQuantity')!.errors?.['required']">Min quantity is required</div>
+            <div *ngIf="promotionForm.get('minQuantity')!.errors?.['min']">
+              Min quantity must be at least {{ promotionForm.get('minQuantity')!.errors?.['min']?.['min'] }}
+            </div>
+            <div *ngIf="promotionForm.get('minQuantity')!.errors?.['max']">
+              Min quantity cannot be more than {{ promotionForm.get('minQuantity')!.errors?.['max']?.['max'] }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Buttons -->
-      <div class="col-12 text-center">
+      <div class="col-12 py-2 text-center">
         <!-- Button to close the popup dialog -->
-        <button mat-flat-button (click)="closepopup()" class="mx-2">Close</button>
+        <button (click)="closepopup()" class="mx-2 p-2 border-2 rounded-lg text-lg w-72">Close</button>
         <!-- Button to submit the form and save all data -->
-        <button mat-raised-button color="accent" type="submit" [disabled]="!promotionForm.valid" class="mx-2">Save</button>
+        <button class="mx-2 p-2 border-2 rounded-lg text-lg w-72"
+          [ngClass]="{ 'bg-light-blue': !promotionForm.valid , 'bg-blue': promotionForm.valid}" type="submit"
+          [disabled]="!promotionForm.valid">Save</button>
       </div>
     </div>
   </div>
 </form>
+
+</div>

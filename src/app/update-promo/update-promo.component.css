@@ -1,0 +1,11 @@
+.bg-light-blue {
+    background-color: rgba(32, 92, 180, 0.671);
+    border-radius: 20px;
+    color: white; /* Optional: Change text color to white for better contrast */
+  }
+  .bg-blue {
+    background-color: rgb(32, 91, 180);
+    border-radius: 20px;
+    color: white; /* Optional: Change text color to white for better contrast */
+  }
+  

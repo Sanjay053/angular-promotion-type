@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterService } from '../_service/master.service';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,8 @@ import { loadPromotionTypes } from '../States/State/promo.action';
 })
 export class PromotionFormComponent implements OnInit {
   promotionForm!: FormGroup;
+  isDropdownOpen = false;
+  isDropdownUomOpen = false;
 
   // Predefined options for promotion types and UOM
   promoTypes: { name: string }[] = [
@@ -55,17 +57,44 @@ export class PromotionFormComponent implements OnInit {
   ngOnInit(): void {
     this.promotionForm = this.fb.group({
       name: ['', Validators.required],
-      factor: [{ value: '', disabled: false }, [Validators.min(1), Validators.max(10),Validators.required]],
-      amount: [{ value: '', disabled: false }, [Validators.min(0), Validators.max(100), Validators.required]],
-      uom: [{ value: '', disabled: false }, Validators.required],
-      itemLimit: ['', [Validators.min(1), Validators.max(49), Validators.required]],
-      minQuantity: ['', [Validators.min(1), Validators.max(50), Validators.required]]
+      factor: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(10),Validators.required]],
+      amount: [{ value: '', disabled: true }, [Validators.min(0), Validators.max(100), Validators.required]],
+      uom: [{ value: '', disabled: true }, Validators.required],
+      itemLimit: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(49), Validators.required]],
+      minQuantity: [{ value: '', disabled: true }, [Validators.min(1), Validators.max(50), Validators.required]]
     });
+  }
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  toggleDropDownUom(): void {
+    this.isDropdownUomOpen = !this.isDropdownUomOpen;
+  }
+
+  selectUom(uom: string): void {
+    this.promotionForm.get('uom')!.setValue(uom);
+  }
+
+  
+  selectPromotionType(type: string): void {
+    this.promotionForm.get('name')!.setValue(type);
+    this.onPromotionTypeChange({ option: { value: type } });
+    this.isDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isDropdownOpen = false;
+      this.isDropdownUomOpen = false;
+    }
   }
 
   // Handle changes in the promotion type dropdown
   onPromotionTypeChange(event: any): void {
-    const selectedType = event.value;
+    const selectedType = event.option.value;
 
     // Update form fields and their states based on the selected promotion type
     switch (selectedType) {
@@ -169,6 +198,7 @@ export class PromotionFormComponent implements OnInit {
           minQuantity: { hidden: false }
         });
     }
+    this.isDropdownOpen = false;
   }
 
   // Update the state of form fields based on provided settings
