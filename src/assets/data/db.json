@@ -1,29 +1,45 @@
 {
   "promotionTypes": [
     {
-      "name": "Buy One Get One Free",
-      "itemLimit": 4,
-      "id": "efd3"
+      "name": "Net Price",
+      "itemLimit": 2,
+      "id": "efd3",
+      "factor": 7,
+      "amount": 15,
+      "uom": "EA",
+      "minQuantity": 41
     },
     {
-      "name": "Buy One Get One Free",
-      "itemLimit": 4,
+      "name": "Buy X Get One Free",
+      "itemLimit": 45,
       "id": "a908"
     },
     {
-      "name": "Buy One Get One Free",
-      "itemLimit": 4,
-      "id": "de12"
+      "name": "Net Price",
+      "itemLimit": 2,
+      "id": "de12",
+      "factor": 7,
+      "amount": 15,
+      "uom": "EA",
+      "minQuantity": 41
     },
     {
-      "name": "Buy One Get One Free",
-      "itemLimit": 4,
+      "name": "Net Price",
+      "factor": 45,
+      "amount": 65,
+      "uom": "LA",
+      "itemLimit": 7,
+      "minQuantity": 7,
       "id": "b44a"
     },
     {
       "id": "b45a",
-      "name": "Buy One Get One Free",
-      "itemLimit": 4
+      "name": "Net Price",
+      "itemLimit": 2,
+      "factor": 7,
+      "amount": 15,
+      "uom": "EA",
+      "minQuantity": 41
     }
   ]
 }
